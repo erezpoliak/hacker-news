@@ -1,24 +1,24 @@
 const urlStart = "https://hacker-news.firebaseio.com/v0/";
 const urlEnd = ".json?print=pretty";
 
-// fn returns the first top 20 articles from the index provided
-export async function getTopArticles(index) {
-  const getTopArticlesIds = async (index) => {
-    const topStoriesUrl = `${urlStart}topstories${urlEnd}`;
+// fn returns the 20 first articles from the index and the type provided by the user
+export async function getArticles(index, type) {
+  const getArticlesIds = async (index, type) => {
+    const fetchUrl = urlStart + type + urlEnd;
     try {
-      const response = await fetch(topStoriesUrl);
+      const response = await fetch(fetchUrl);
       const jsoned = await response.json();
-      const result = jsoned.slice(index, index + 19);
+      const result = jsoned.slice(index, index + 20);
       return result;
     } catch (err) {
       console.log(err);
     }
   };
 
-  const topArticlesIds = await getTopArticlesIds(index);
+  const ArticlesIds = await getArticlesIds(index, type);
 
-  const topArticleArr = await Promise.all(
-    topArticlesIds.map(async (id) => {
+  const ArticleArr = await Promise.all(
+    ArticlesIds.map(async (id) => {
       const articleUrl = `${urlStart}/item/${id}/${urlEnd}`;
       try {
         const article = await fetch(articleUrl);
@@ -30,5 +30,5 @@ export async function getTopArticles(index) {
     })
   );
 
-  return topArticleArr;
+  return ArticleArr;
 }

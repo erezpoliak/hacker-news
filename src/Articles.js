@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import * as Api from "./Api";
 import { NewsContext } from "./Context";
@@ -10,20 +10,37 @@ import {
 import Spinner from "./Spinner";
 
 const Articles = () => {
-  const [articles, setArticles] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const { typeOfFeed } = useContext(NewsContext);
+  const {
+    typeOfFeed,
+    pageNumber,
+    articles,
+    setPageNumber,
+    setArticles,
+  } = useContext(NewsContext);
 
   useEffect(() => {
     const fetchArticles = async () => {
-      if (typeOfFeed === "Top") {
-        const fetchedarticles = await Api.getTopArticles(0);
-        setArticles(fetchedarticles);
-      }
+      const index = (pageNumber - 1) * 20;
+      const fetchedArticles = await Api.getArticles(index, typeOfFeed);
+      setArticles(fetchedArticles);
     };
 
     fetchArticles();
-  }, [typeOfFeed]);
+  }, [typeOfFeed, pageNumber, setArticles]);
+
+  const leftArrowClicked = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+      setArticles([]);
+    }
+  };
+
+  const rightArrowClicked = () => {
+    if (pageNumber < 500 / 20) {
+      setPageNumber(pageNumber + 1);
+      setArticles([]);
+    }
+  };
 
   return (
     <>
@@ -31,8 +48,10 @@ const Articles = () => {
         <ArticlesContainer>
           {articles.map((article, i) => {
             return (
-              <Article id={Math.random()} href={article.url}>
-                <ArticleNumber>{`${i + 1}.`}</ArticleNumber>
+              <Article key={Math.random()} href={article.url}>
+                <ArticleNumber>{`${
+                  (pageNumber - 1) * 20 + i + 1
+                }.`}</ArticleNumber>
                 <ArticleTitle>${article.title}</ArticleTitle>
               </Article>
             );
@@ -40,12 +59,14 @@ const Articles = () => {
           <PageSelector>
             <FontAwesomeIcon
               icon={faArrowCircleLeft}
-              style={{ fontSize: "4.5vh" }}
+              style={{ fontSize: "4.5vh", cursor: "pointer" }}
+              onClick={leftArrowClicked}
             />
             <PageNumber>{pageNumber}</PageNumber>
             <FontAwesomeIcon
               icon={faArrowCircleRight}
-              style={{ fontSize: "4.5vh" }}
+              style={{ fontSize: "4.5vh", cursor: "pointer" }}
+              onClick={rightArrowClicked}
             />
           </PageSelector>
         </ArticlesContainer>
