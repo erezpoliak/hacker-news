@@ -21,7 +21,6 @@ const TopBar = () => {
 export default TopBar;
 
 const Container = styled.div`
-  height: 12vh;
   display: flex;
   align-items: center;
   background: #ff5722;

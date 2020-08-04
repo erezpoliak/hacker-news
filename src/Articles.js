@@ -3,6 +3,11 @@ import styled from "styled-components";
 import * as Api from "./Api";
 import { NewsContext } from "./Context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowCircleLeft,
+  faArrowCircleRight,
+} from "@fortawesome/free-solid-svg-icons";
+import Spinner from "./Spinner";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -21,17 +26,35 @@ const Articles = () => {
   }, [typeOfFeed]);
 
   return (
-    <ArticlesContainer>
-      {articles.map((article, i) => {
-        return (
-          <Article id={Math.random()} href={article.url}>
-            <ArticleNumber>{`${i + 1}.`}</ArticleNumber>
-            <ArticleTitle>${article.title}</ArticleTitle>
-          </Article>
-        );
-      })}
-      <PageSelector></PageSelector>
-    </ArticlesContainer>
+    <>
+      {articles.length > 0 ? (
+        <ArticlesContainer>
+          {articles.map((article, i) => {
+            return (
+              <Article id={Math.random()} href={article.url}>
+                <ArticleNumber>{`${i + 1}.`}</ArticleNumber>
+                <ArticleTitle>${article.title}</ArticleTitle>
+              </Article>
+            );
+          })}
+          <PageSelector>
+            <FontAwesomeIcon
+              icon={faArrowCircleLeft}
+              style={{ fontSize: "4.5vh" }}
+            />
+            <PageNumber>{pageNumber}</PageNumber>
+            <FontAwesomeIcon
+              icon={faArrowCircleRight}
+              style={{ fontSize: "4.5vh" }}
+            />
+          </PageSelector>
+        </ArticlesContainer>
+      ) : (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      )}
+    </>
   );
 };
 
@@ -61,6 +84,18 @@ const ArticleNumber = styled.div`
 `;
 
 const PageSelector = styled.div`
+  margin-top: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PageNumber = styled.div`
+  padding: 1vh;
+  font-size: 2.5vh;
+`;
+
+const SpinnerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
