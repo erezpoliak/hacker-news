@@ -34,22 +34,36 @@ const Comments = ({ post }) => {
     getComments();
   }, [post.kids]);
 
-  console.log(comments);
+  const generateId = () => {
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const charactersLength = characters.length;
+    for (let i = 0; i < 13; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
 
   return (
     <Container>
       {comments.length > 0 ? (
         comments.map((comment) => {
           return (
-            <CommentContainer>
+            <CommentContainer key={generateId()}>
               <h3>{comment.comment.by}</h3>
-              <CommentText>{comment.comment.text}</CommentText>
+              <CommentText
+                dangerouslySetInnerHTML={{ __html: comment.comment.text }}
+              />
               {comment.kidComments
                 ? comment.kidComments.map((comment) => {
                     return (
-                      <KidCommentsContainer style={{ marginLeft: "6vw" }}>
+                      <KidCommentsContainer key={generateId()}>
                         <h3>{comment.by}</h3>
-                        <CommentText>{comment.text}</CommentText>
+                        <CommentText
+                          dangerouslySetInnerHTML={{
+                            __html: comment.text,
+                          }}
+                        />
                       </KidCommentsContainer>
                     );
                   })

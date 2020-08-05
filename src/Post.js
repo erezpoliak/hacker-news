@@ -26,7 +26,7 @@ const Post = () => {
         {post ? (
           <>
             <Title>{post.title}</Title>
-            <Text>{post.text}</Text>
+            <Text dangerouslySetInnerHTML={{ __html: post.text }} />
             <Text>comments:</Text>
             <Comments post={post} />
           </>
