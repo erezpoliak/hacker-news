@@ -1,13 +1,16 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 import Feed from "./Feed";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Post from "./Post";
 
 function App() {
   return (
-    <>
+    <Router>
       <GlobalStyle />
-      <Feed />
-    </>
+      <Route exact path="/" component={Feed} />
+      <Route path="/post" component={Post} />
+    </Router>
   );
 }
 

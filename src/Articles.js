@@ -8,6 +8,7 @@ import {
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import Spinner from "./Spinner";
+import { Link } from "react-router-dom";
 
 const Articles = () => {
   const {
@@ -16,6 +17,7 @@ const Articles = () => {
     articles,
     setPageNumber,
     setArticles,
+    setPostId,
   } = useContext(NewsContext);
 
   useEffect(() => {
@@ -42,18 +44,37 @@ const Articles = () => {
     }
   };
 
+  const generateId = () => {
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const charactersLength = characters.length;
+    for (let i = 0; i < 13; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
   return (
     <>
       {articles.length > 0 ? (
         <ArticlesContainer>
           {articles.map((article, i) => {
-            return (
-              <Article key={Math.random()} href={article.url}>
+            return article.url ? (
+              <Article key={generateId()} href={article.url}>
                 <ArticleNumber>{`${
                   (pageNumber - 1) * 20 + i + 1
                 }.`}</ArticleNumber>
                 <ArticleTitle>${article.title}</ArticleTitle>
               </Article>
+            ) : (
+              <PostLink to="/post" key={generateId()}>
+                <Article onClick={() => setPostId(article.id)}>
+                  <ArticleNumber>{`${
+                    (pageNumber - 1) * 20 + i + 1
+                  }.`}</ArticleNumber>
+                  <ArticleTitle>${article.title}</ArticleTitle>
+                </Article>
+              </PostLink>
             );
           })}
           <PageSelector>
@@ -120,4 +141,9 @@ const SpinnerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PostLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `;

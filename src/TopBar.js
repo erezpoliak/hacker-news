@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { NewsContext } from "./Context";
+import { Link } from "react-router-dom";
 
 const TopBar = () => {
   const { setTypeOfFeed, setPageNumber, setArticles } = useContext(NewsContext);
@@ -17,6 +18,7 @@ const TopBar = () => {
       <Title>Hacker News</Title>
       <FeedSelectorContainer>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("topstories");
           }}
@@ -24,6 +26,7 @@ const TopBar = () => {
           Top
         </FeedSelector>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("newstories");
           }}
@@ -31,6 +34,7 @@ const TopBar = () => {
           New
         </FeedSelector>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("beststories");
           }}
@@ -38,6 +42,7 @@ const TopBar = () => {
           Best
         </FeedSelector>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("askstories");
           }}
@@ -45,6 +50,7 @@ const TopBar = () => {
           Ask
         </FeedSelector>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("showstories");
           }}
@@ -52,6 +58,7 @@ const TopBar = () => {
           Show
         </FeedSelector>
         <FeedSelector
+          to="/"
           onClick={() => {
             FeedSelectorClicked("jobstories");
           }}
@@ -81,13 +88,15 @@ const Title = styled.div`
   margin-left: 2vw;
 `;
 
-const FeedSelector = styled.div`
+const FeedSelector = styled(Link)`
   padding-left: 2vw;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.05rem;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const FeedSelectorContainer = styled.div`
